@@ -1,27 +1,22 @@
 #!/usr/bin/python3
-import MySQLdb
+'''Prints all rows in the states table of a database.
+'''
 import sys
+import MySQLdb
+
 
 if __name__ == '__main__':
-    username = sys.argv[1]
-    password = sys.argv[2]
-    db_name = sys.argv[3]
-
-    # connect to MySQL server
-    db = MySQLdb.connect(host='localhost', port=3306,
-                         user=username, passwd=password, db=db_name)
-
-    # create cursor object
-    cursor = db.cursor()
-
-    # execute SQL query
-    cursor.execute('SELECT * FROM states ORDER BY states.id ASC')
-
-    # fetch all rows and print them
-    rows = cursor.fetchall()
-    for row in rows:
-        print(row)
-
-    # close cursor and database connection
-    cursor.close()
-    db.close()
+    if len(sys.argv) >= 4:
+        db_connection = MySQLdb.connect(
+            host='localhost',
+            port=3306,
+            user=sys.argv[1],
+            passwd=sys.argv[2],
+            db=sys.argv[3]
+        )
+        cursor = db_connection.cursor()
+        cursor.execute('SELECT * FROM states ORDER BY id ASC;')
+        results = cursor.fetchall()
+        for result in results:
+            print(result)
+        db_connection.close()
